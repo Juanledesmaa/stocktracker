@@ -7,10 +7,19 @@
 
 import Foundation
 
-struct Stock: Decodable, Equatable {
-	let uuid: String
+struct Stock: Identifiable, Codable {
+	var id: String { ticker }
 	let name: String
-	let price: Double
-	let priceChange24Hrs: Double
+	let ticker: String
+	let price: Decimal
+	let priceChange24Hrs: Decimal
 	let isFeatured: Bool
+
+	enum CodingKeys: String, CodingKey {
+		case name
+		case ticker
+		case price
+		case priceChange24Hrs = "price_change_24hrs"
+		case isFeatured = "is_featured"
+	}
 }

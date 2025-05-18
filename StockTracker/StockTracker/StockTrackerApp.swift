@@ -11,7 +11,12 @@ import SwiftUI
 struct StockTrackerApp: App {
     var body: some Scene {
         WindowGroup {
-            ContentView()
+			let dataSource = StockListDataSource()
+			let stockListService = StockListService(dataSource: dataSource)
+			let viewModel = StockListViewModel(
+				service: stockListService
+			)
+			StockListView(viewModel: viewModel)
         }
     }
 }

@@ -16,6 +16,15 @@ struct StockListView: View {
 	}
 	
 	var body: some View {
-		Text("I'm gonna be an awesome stock list View soon...")
+		NavigationView {
+			VStack(content: {
+				Text("Awesome Stocket tracker list goes here!!")
+			})
+			.navigationTitle("STOCK TRACKER")
+			.background(.black)
+		}
+		.task {
+			await viewModel.loadStocks()
+		}
 	}
 }
