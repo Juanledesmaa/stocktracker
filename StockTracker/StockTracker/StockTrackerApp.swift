@@ -11,12 +11,25 @@ import SwiftUI
 struct StockTrackerApp: App {
     var body: some Scene {
         WindowGroup {
+			// TODO: Refactor everything here to a Builder/Factory pattern.
 			let dataSource = StockListDataSource()
 			let stockListService = StockListService(dataSource: dataSource)
 			let viewModel = StockListViewModel(
 				service: stockListService
 			)
-			StockListView(viewModel: viewModel)
+			
+			RootTabView(tabs: [
+				TabItem(
+					view: AnyView(StockListView(viewModel: viewModel)),
+					label: "Home",
+					systemImage: "list.bullet"
+				),
+				TabItem(
+					view: AnyView(FavoriteStocksView(viewModel: FavoriteStocksViewModel())),
+					label: "Favorites",
+					systemImage: "star.fill"
+				)
+			])
         }
     }
 }
