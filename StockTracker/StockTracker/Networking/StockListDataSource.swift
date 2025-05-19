@@ -7,14 +7,26 @@
 
 import Foundation
 
+/// Concrete implementation of `StockListDataSourceProtocol` that loads
+/// stock data from a local bundled JSON file.
+///
+/// Includes a simulated delay to mimic real network latency,
+/// as specified by the exercise.
+/// Can be replaced with a live API data source by conforming
+/// to the same protocol.
 final class StockListDataSource: StockListDataSourceProtocol {
+	
+	private let resourceName: String
+
+	init(resourceName: String = "example_response") {
+		self.resourceName = resourceName
+	}
+
 	func fetchStocks() async throws -> [Stock] {
-		// One of the project requirements states that we need to
-		// delay the response 1 second.
 		try await Task.sleep(for: .seconds(1))
 		
 		guard let url = Bundle.main.url(
-			forResource: "example_response",
+			forResource: resourceName,
 			withExtension: "json") else {
 			throw NSError(
 				domain: "StockListDataSource",
@@ -29,6 +41,4 @@ final class StockListDataSource: StockListDataSourceProtocol {
 		
 		return try JSONDecoder().decode([Stock].self, from: data)
 	}
-	
-	
 }
