@@ -17,14 +17,25 @@ struct StockListView: View {
 	
 	var body: some View {
 		NavigationView {
-			VStack(content: {
-				Text("Awesome Stocket tracker list goes here!!")
-			})
+			content
 			.navigationTitle("STOCK TRACKER")
-			.background(.black)
+			.background(Color.appColor.primaryBackground)
 		}
 		.task {
 			await viewModel.loadStocks()
 		}
+	}
+	
+	@ViewBuilder
+	private var content: some View {
+		StockListRefreshableList(
+			stocks: viewModel.shownStocks,
+			onRefresh: {
+				await viewModel.loadStocks()
+			},
+			onToggleFavorite: { stock in
+				print("I Would love to add this favorite: \(stock)")
+			}
+		)
 	}
 }
