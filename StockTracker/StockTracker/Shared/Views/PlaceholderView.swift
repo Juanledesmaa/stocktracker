@@ -44,7 +44,8 @@ struct PlaceholderView: View {
 					Text(title)
 						.multilineTextAlignment(.center)
 						.frame(maxWidth: .infinity, alignment: .center)
-						.font(.system(size: 24, weight: .semibold))
+						.font(.title3.weight(.semibold))
+
 				}
 				
 				if let subtitle = subtitle {
@@ -52,10 +53,11 @@ struct PlaceholderView: View {
 						.foregroundStyle(.opacity(0.7))
 						.multilineTextAlignment(.center)
 						.frame(maxWidth: .infinity, alignment: .center)
-						.font(.system(size: 18, weight: .regular))
+						.font(.body.weight(.regular))
 				}
 			}
 		}
 		.frame(maxWidth: .infinity, maxHeight: .infinity, alignment: alignment)
+		.padding(.horizontal, 16)
 	}
 }

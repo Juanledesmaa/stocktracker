@@ -19,7 +19,7 @@ struct StockListView: View {
 		content
 			.background(Color.appColor.primaryBackground)
 			.task {
-				await viewModel.loadStocks()
+				await viewModel.loadStocks(force: false)
 			}
 	}
 	
@@ -35,31 +35,34 @@ struct StockListView: View {
 					StockList(configuration: .init(
 						featuredStocks: featuredStocks,
 						allStocks: allStocks,
-						headerTitle: "All Stocks",
+						headerTitle: viewModel.viewData.listHeaderTitle,
+						selectedSort: viewModel.currentSort,
 						onToggleFavorite: { stock in
-							print("Favorited: \(stock)")
+							viewModel.toggleFavorite(stock)
 						},
 						onRefresh: {
-							//await viewModel.loadStocks()
+							await viewModel.loadStocks(force: true)
+						},
+						onSortChange: { sortOption in
+							viewModel.applySort(sortOption)
 						}
 					))
-					
 				case .empty:
 					EmptyStateView(
 						title: viewModel.viewData.emptyStocksTitle,
 						imageName: viewModel.viewData.emptyImageName
 					) {
-						await viewModel.loadStocks()
+						await viewModel.loadStocks(force: true)
 					}
 					
 				case .error(_):
 					EmptyStateView(
 						title: viewModel.viewData.errorTitle,
-						subTitle: viewModel.viewData.errorTitle,
+						subTitle: viewModel.viewData.errorSubtitle,
 						imageName: viewModel.viewData.errorImageName,
 						imageSize: viewModel.viewData.errorImageSize
 					) {
-						await viewModel.loadStocks()
+						await viewModel.loadStocks(force: true)
 					}
 			}
 		}

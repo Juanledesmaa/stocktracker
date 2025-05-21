@@ -15,27 +15,48 @@ struct FavoriteStocksView: View {
 	}
 
 	var body: some View {
-		content
-			.background(Color.appColor.primaryBackground)
-			.task {
-				// TODO: Load Favorites
-			}
+		AppNavigationStack {
+			content
+		}
+		.background(Color.appColor.primaryBackground)
+		.task {
+			viewModel.loadFavorites()
+		}
 	}
-	
+
 	@ViewBuilder
 	private var content: some View {
-		AppNavigationStack {
+		switch viewModel.state {
+		case .idle, .loading:
+				ProgressView(viewModel.viewData.progressViewText)
+
+		case .empty:
+			EmptyStateView(
+				title: viewModel.viewData.emptyFavoritesTitle,
+				imageName: viewModel.viewData.emptyImageName,
+				imageSize: viewModel.viewData.emptyImageSize,
+				onRefresh: {
+					viewModel.loadFavorites()
+				}
+			)
+
+		case .loaded(let favorites):
 			StockList(configuration: .init(
 				featuredStocks: [],
-				allStocks: [],
-				headerTitle: "Your favorite Stocks",
-				onToggleFavorite: nil,
-				onRefresh: {
-					print("Pull to Refresh method")
+				allStocks: favorites,
+				headerTitle: viewModel.viewData.listHeaderTitle,
+				selectedSort: viewModel.currentSort,
+				onToggleFavorite: { stock in
+					viewModel.toggleFavorite(stock)
+				},
+				onRefresh: nil,
+				onSortChange: { sortOption in
+					viewModel.applySort(sortOption)
 				}
 			))
 		}
 	}
 }
+
 
 

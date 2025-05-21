@@ -2,24 +2,19 @@
 //  MockStockListService.swift
 //  StockTracker
 //
-//  Created by Juanito on 5/18/25.
+//  Created by Juanito on 5/21/25.
 //
 
 @testable import StockTracker
 
-final class MockStockListDataSource: StockListDataSourceProtocol {
-	let result: Result<[Stock], Error>
+final class MockStockListService: StockListServiceProtocol {
+	var stocks: [Stock]
+	var errorMessage: String?
 
-	init(result: Result<[Stock], Error>) {
-		self.result = result
+	init(stocks: [Stock] = [], errorMessage: String? = nil) {
+		self.stocks = stocks
+		self.errorMessage = errorMessage
 	}
 
-	func fetchStocks() async throws -> [Stock] {
-		switch result {
-		case .success(let stocks):
-			return stocks
-		case .failure(let error):
-			throw error
-		}
-	}
+	func loadStocks(force: Bool) async {}
 }

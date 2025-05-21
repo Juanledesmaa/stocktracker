@@ -1,0 +1,23 @@
+[
+	{
+		"name": "Apple",
+		"ticker": "APPL",
+		"price": 240.18,
+		"price_change_24hrs": 1.43,
+		"is_featured": true
+	},
+	{
+		"name": "Meta Platforms",
+		"ticker": "META",
+		"price": 661.86,
+		"price_change_24hrs": -11.54,
+		"is_featured": false
+	},
+	{
+		"name": "Alphabet",
+		"ticker": "GOOG",
+		"price": 170.21,
+		"price_change_24hrs": -4.49,
+		"is_featured": false
+	},
+]

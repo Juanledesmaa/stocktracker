@@ -22,9 +22,14 @@ struct EmptyStateView: View {
 				title: title,
 				subtitle: subTitle
 			)
+			.accessibilityElement()
+			.accessibilityLabel(accessibilityText)
 		} onRefresh: {
 			await onRefresh()
 		}
-		.scrollDismissesKeyboard(.interactively)
+	}
+	
+	private var accessibilityText: String {
+		return "\(title); \(subTitle ?? "")"
 	}
 }

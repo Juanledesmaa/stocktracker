@@ -28,6 +28,7 @@ struct AppNavigationStack<Content: View>: View {
 							.resizable()
 							.scaledToFit()
 							.frame(height: 48)
+							.accessibilityHidden(true)
 					}
 				}
 		}

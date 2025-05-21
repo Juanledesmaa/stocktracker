@@ -8,17 +8,17 @@
 import SwiftUI
 
 struct FeaturedStockCellView: View {
-	let stock: Stock
+	let stockDisplay: StockDisplay
 	
 	var body: some View {
 		VStack {
 			HStack {
 				VStack(alignment: .leading, spacing: 2) {
-					Text(stock.name)
+					Text(stockDisplay.stock.name)
 						.font(.footnote)
 						.foregroundColor(Color(.label))
 					
-					Text(stock.ticker)
+					Text(stockDisplay.stock.ticker)
 						.font(.caption)
 						.foregroundColor(Color(.label))
 						.lineLimit(1)
@@ -27,7 +27,7 @@ struct FeaturedStockCellView: View {
 				Spacer()
 				
 				VStack(alignment: .trailing, spacing: 2) {
-					Text("$\(stock.price)")
+					Text(formattedPrice)
 						.font(.footnote)
 						.foregroundColor(Color(.label))
 
@@ -37,7 +37,7 @@ struct FeaturedStockCellView: View {
 						.padding(.horizontal, 6)
 						.padding(.vertical, 2)
 						.background(
-							stock.priceChange24Hrs >= 0
+							stockDisplay.stock.priceChange24Hrs >= 0
 								? Color.appColor.positiveGreen
 								: Color.appColor.negativeRed
 						)
@@ -51,11 +51,31 @@ struct FeaturedStockCellView: View {
 		.background(Color.appColor.secondaryBackground)
 		.cornerRadius(12)
 		.padding(.horizontal, 4)
+		.accessibilityElement()
+		.accessibilityLabel(accessibilityText)
 	}
 	
 	private var formattedChange: String {
-		let sign = stock.priceChange24Hrs >= 0 ? "+" : ""
-		return "\(sign)\(stock.priceChange24Hrs)"
+		let sign = stockDisplay.stock.priceChange24Hrs >= 0 ? "+" : ""
+		return "\(sign)\(stockDisplay.stock.priceChange24Hrs)"
+	}
+	
+	private var formattedPrice: String {
+		"$\(stockDisplay.stock.price)"
+	}
+	
+	private var accessibilityText: String {
+		let change = stockDisplay.stock.priceChange24Hrs
+		let direction: String = {
+			if change == 0 {
+				return "no change in price"
+			} else if change > 0 {
+				return "up by \(change)"
+			} else {
+				return "down by \(abs(change))"
+			}
+		}()
+		return "\(stockDisplay.stock.name); ticker; \(stockDisplay.stock.ticker.spelledOut). \(formattedPrice). \(direction)"
 	}
 }
 

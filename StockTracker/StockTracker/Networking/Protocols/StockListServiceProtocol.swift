@@ -11,5 +11,5 @@ import Foundation
 protocol StockListServiceProtocol: ObservableObject {
 	var stocks: [Stock] { get }
 	var errorMessage: String? { get }
-	func loadStocks() async
+	func loadStocks(force: Bool) async
 }
