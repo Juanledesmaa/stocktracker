@@ -13,6 +13,7 @@ extension Color {
 
 	struct AppColor {
 		let primaryBackground = Color("PrimaryBackground")
+		let secondaryBackground = Color("SecondaryBackground")
 		let positiveGreen = Color("PositiveGreen")
 		let negativeRed = Color("NegativeRed")
 	}

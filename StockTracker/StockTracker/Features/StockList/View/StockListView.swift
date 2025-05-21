@@ -16,26 +16,52 @@ struct StockListView: View {
 	}
 	
 	var body: some View {
-		NavigationView {
-			content
-			.navigationTitle("STOCK TRACKER")
+		content
 			.background(Color.appColor.primaryBackground)
-		}
-		.task {
-			await viewModel.loadStocks()
-		}
+			.task {
+				await viewModel.loadStocks()
+			}
 	}
 	
 	@ViewBuilder
 	private var content: some View {
-		StockListRefreshableList(
-			stocks: viewModel.shownStocks,
-			onRefresh: {
-				await viewModel.loadStocks()
-			},
-			onToggleFavorite: { stock in
-				print("I Would love to add this favorite: \(stock)")
+		AppNavigationStack {
+			switch viewModel.state {
+				case .idle, .loading:
+					ProgressView(viewModel.viewData.progressViewText)
+						.frame(maxWidth: .infinity, maxHeight: .infinity)
+					
+				case .loaded(let featuredStocks, let allStocks):
+					StockList(configuration: .init(
+						featuredStocks: featuredStocks,
+						allStocks: allStocks,
+						headerTitle: "All Stocks",
+						onToggleFavorite: { stock in
+							print("Favorited: \(stock)")
+						},
+						onRefresh: {
+							//await viewModel.loadStocks()
+						}
+					))
+					
+				case .empty:
+					EmptyStateView(
+						title: viewModel.viewData.emptyStocksTitle,
+						imageName: viewModel.viewData.emptyImageName
+					) {
+						await viewModel.loadStocks()
+					}
+					
+				case .error(_):
+					EmptyStateView(
+						title: viewModel.viewData.errorTitle,
+						subTitle: viewModel.viewData.errorTitle,
+						imageName: viewModel.viewData.errorImageName,
+						imageSize: viewModel.viewData.errorImageSize
+					) {
+						await viewModel.loadStocks()
+					}
 			}
-		)
+		}
 	}
 }
